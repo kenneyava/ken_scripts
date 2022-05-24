@@ -13,7 +13,9 @@ def walk_dir():
             filename = os.path.join(root, name)
             if (not (os.path.islink(filename))) and (not PATTERN.findall(root)):  
                 stats = os.stat(filename)
-                if pwd.getpwuid(stats.st_uid).pw_name == '':
+                try:
+                    uid = pwd.getpwuid(stats.st_uid).pw_name
+                except Exception as e:
                     print( filename + " " + stats.st_uid)
 
 
