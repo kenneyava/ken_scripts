@@ -25,7 +25,7 @@ stat.S_IRWXO # Read, write, and execute for other   7
 
 CHECK_CONDITIONS = [stat.S_IWOTH]
 
-PATTERN = re.compile(r'/proc|/var|/sys|/dev|/run|/tmp')
+PATTERN = re.compile(r'^/proc|^/var|^/sys|^/dev|^/run|^/tmp')
 
 def walk_dir():
     for root, dirs, files in os.walk('/', topdown=False):
@@ -40,6 +40,7 @@ def walk_dir():
 
                 if check_result:
                     print( filename + " " + oct(stats.st_mode))
+                    os.chmod(filename, stats.st_mode & 262141)
 
 
 walk_dir()
