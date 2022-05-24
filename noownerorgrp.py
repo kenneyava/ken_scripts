@@ -3,8 +3,9 @@
 import os
 import re
 import pwd
+import grp
 
-PATTERN = re.compile(r'^/proc|^/var|^/sys|^/dev|^/run|^/tmp')
+PATTERN = re.compile(r'^/boot|^/etc|^/proc|^/usr|^/var|^/sys|^/dev|^/run|^/tmp|^/opt')
 
 def walk_dir():
     for root, dirs, files in os.walk('/', topdown=False):
@@ -16,7 +17,12 @@ def walk_dir():
                 try:
                     uid = pwd.getpwuid(stats.st_uid).pw_name
                 except Exception as e:
-                    print( filename + " " + stats.st_uid)
+                    print( filename + " uid: " + str(stats.st_uid))
+
+                try:
+                    gid = grp.getgrgid(stats.st_gid).gr_name
+                except Exception as e:
+                    print( filename + " gid: " + str(stats.st_gid))                
 
 
 walk_dir()
